@@ -138,15 +138,4 @@ The game allows players to:
 
 ---
 
-## 🛠️ Tech Used
-
-- JavaScript (Node.js runtime)
-- Console I/O (`readline-sync`)
-- KN-Lang mapping to JavaScript:
-  - **Squad → Class**
-  - **Doodle → Method**
-  - **Quark → Variable**
-
----
-
 
