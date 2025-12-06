@@ -1,0 +1,130 @@
+ // Just Saying: Player Squad handles username & score
+ Squad Player {
+    Quark name = "Nameless Genius";
+    Quark score = 0;
+
+    Doodle updateScore(points) {
+        score = score + points;
+        Print("Your score is now: " + score);
+    }
+ }
+
+ // Just Saying: Question Squad structure
+ Squad Question {
+    Quark category;
+    Quark difficulty;
+    Quark questionText;
+    Quark correctAnswer;
+ }
+
+ // Just Saying: The main Quiz Master running the show
+ Squad QuizMaster {
+    Quark questions = [];
+    Quark player = new Player();
+    Quark currentCategory;
+    Quark currentDifficulty;
+    Quark questionCounter = 0;
+
+    Doodle chooseCategory() {
+        Print("Choose a category: Science, History, Fun Facts");
+        currentCategory = Input(">> ");
+        Print("Ooo fancy. You picked: " + currentCategory);
+    }
+
+    Doodle chooseDifficulty() {
+        Print("Select difficulty: Easy / Medium / Hard");
+        currentDifficulty = Input(">> ");
+        Print("Difficulty set to: " + currentDifficulty + ". Good luck, you’ll need it.");
+    }
+
+    Doodle askQuestion(q) {
+        Print("\nQuestion: " + q.questionText);
+        Quark answer = Input("Your Answer: ");
+
+        evaluateAnswer(q, answer);
+        commentOnAnswer(answer == q.correctAnswer);
+    }
+
+    Doodle evaluateAnswer(q, answer) {
+        Quark points = 0;
+
+        If (q.difficulty == "Easy") {
+            points = (answer == q.correctAnswer) ? 5 : -2;
+        }
+        Else If (q.difficulty == "Medium") {
+            points = (answer == q.correctAnswer) ? 10 : -5;
+        }
+        Else {
+            points = (answer == q.correctAnswer) ? 15 : -7;
+        }
+
+        player.updateScore(points);
+    }
+
+    Doodle commentOnAnswer(isCorrect) {
+        If (isCorrect) {
+            Print(" Correct! Someone paid attention in school.");
+        } Else {
+            Print(" Wrong… but hey, confidence counts. Just not here.");
+        }
+    }
+
+    Doodle showScore() {
+        Print("\nFinal Score: " + player.score);
+        If (player.score >= 80) {
+            Print("👑 Quiz Royalty has arrived!");
+        }
+        Else If (player.score >= 50) {
+            Print("🥈 Quiz Master in training.");
+        }
+        Else {
+            Print("💀 Better luck next time, genius.");
+        }
+    }
+
+    Doodle start() {
+        Print("🎉 Welcome to QUIZ MASTER — where your brain gets judged.");
+
+        Quark nameInput = Input("Enter your name: ");
+        player.name = nameInput;
+        Print("Hello, " + player.name + "! Let's test your survival… mentally.");
+
+        chooseCategory();
+        chooseDifficulty();
+
+        SpinCycle (questionCounter < 10) {
+            Quark random = questions.random();
+            askQuestion(random);
+            questionCounter = questionCounter + 1;
+        }
+
+        showScore();
+    }
+ }
+
+ // Just Saying: Sample questions
+ Quark q1 = new Question();
+ q1.category = "Science";
+ q1.difficulty = "Easy";
+ q1.questionText = "What planet is known as the Red Planet?";
+ q1.correctAnswer = "Mars";
+
+ Quark q2 = new Question();
+ q2.category = "History";
+ q2.difficulty = "Medium";
+ q2.questionText = "Which empire built the Colosseum?";
+ q2.correctAnswer = "Roman Empire";
+
+ Quark q3 = new Question();
+ q3.category = "Fun Facts";
+ q3.difficulty = "Hard";
+ q3.questionText = "What animal cannot look up?";
+ q3.correctAnswer = "Pig";
+
+ // Just Saying: Add questions and start
+ Quark quiz = new QuizMaster();
+ quiz.questions.add(q1);
+ quiz.questions.add(q2);
+ quiz.questions.add(q3);
+
+ quiz.start();

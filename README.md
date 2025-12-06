@@ -84,3 +84,69 @@ A victory message is shown — slightly insulting, but celebratory.
 ---
 
 
+
+
+
+
+# 🎮 Quiz Master — Console-Based Quiz Game (KN-Lang Styled JS)
+
+Welcome to **Quiz Master**, a terminal quiz game with personality.  
+This snarky console will test your knowledge and roast you at the same time — because pain builds character 🤡.
+
+---
+
+## 📌 Project Description
+
+This project is inspired by the assignment requirements for building a quiz game using the **KN-Lang structure** (Squads, Quarks, Doodles) — but implemented in **JavaScript** so it can run in real life.
+
+The game allows players to:
+
+- Choose a **category**
+- Select a **difficulty**
+- Answer 10 randomly selected questions
+- Earn (or lose) points based on difficulty
+- Receive sarcastic commentary
+- Get a final ranking based on score
+
+---
+
+## 🧠 Features
+
+✔ Multiple question categories:  
+`Science`, `History`, `Fun Facts`
+
+✔ 3 difficulty levels:  
+`Easy`, `Medium`, `Hard`
+
+✔ Dynamic scoring based on difficulty:
+
+| Difficulty | Correct | Wrong |
+|-----------|---------|--------|
+| Easy      | +5      | -2     |
+| Medium    | +10     | -5     |
+| Hard      | +15     | -7     |
+
+✔ Humorous responses
+
+✔ Final rank based on performance:
+
+| Score Range | Title |
+|------------|--------|
+| 80+        | 👑 Quiz Royalty |
+| 50–79      | 🧠 Quiz Master in Training |
+| Below 50   | 🤡 Better Luck Next Time |
+
+---
+
+## 🛠️ Tech Used
+
+- JavaScript (Node.js runtime)
+- Console I/O (`readline-sync`)
+- KN-Lang mapping to JavaScript:
+  - **Squad → Class**
+  - **Doodle → Method**
+  - **Quark → Variable**
+
+---
+
+
