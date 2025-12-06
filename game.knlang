@@ -1,0 +1,183 @@
+
+// squad player 
+
+Squad Player{
+    Quark name = "Brave Human";
+    Quark inventory = [];
+    Quark currentRoom = "Entrance";
+    Quark isAlive = true;
+
+    Doodle pickup(item){
+        if(currentRoom.items.contains(item)){
+            inventory.add(item);
+            currentRoom.items.remove(item);
+            print("You picked up the "+ item +". you now feel 2% smarter");
+        }else{
+            print("The item " + item + "doesn't exist here. Maybe you're hallucinating");
+        }
+    }
+
+    Doodle showInventory(){
+        if(inventory.length>0){
+            print (`Your inventory : ${inventory.join(",")}`);
+        }else{
+            print("Your pockets are emptier than your weekend schedule.");
+        }
+    }
+
+    Doodle move(direction){
+        if(currentRoom.exits.contains(direction)){
+            Quark nextRoomName = currentRoom.exits[direction];
+
+            if(nextRoomName == "Locked Door" && !== inventory.contains("rusty key")){
+                print ("The door refuses to open. It demands a "rusty key" like a spoild toddler.");
+                return ;
+            }
+
+            currentRoom= GameManager.rooms[nextRoomName];
+            Print(`You walk ${direction} info ${nextRoomName} . `)
+            currentRoom.showDetails();
+        }else{
+            print(`You try walking ${direction} and bump into an invisible wall .Smooth`);
+        }
+    }
+
+}
+
+
+// squad : rooms
+
+
+Squad Room {
+    Quark name ; 
+    Quark description ;
+    Quark items = [];
+    Quark exists = {};
+    Quark puzzleSolved = false;
+
+
+    
+    Doodle showDetails() {
+        Print("\n=== " + name + " ===");
+        Print(description);
+
+        If (items.length > 0) {
+            Print("Items here: " + items.join(", "));
+        } Else {
+            Print("No items. Just dust and regret.");
+        }
+    }
+
+    Doodle interact() {
+        If (name == "Crystal Chamber" AND NOT puzzleSolved) {
+            Print("A magical crystal blocks your path. It whispers: 'Answer me...'");
+            Print("Riddle: What has keys but can't open doors?");
+            Quark answer = Input("Your Answer: ");
+
+            If (answer.toLowerCase() == "piano") {
+                Print("The crystal glows and disappears. Congrats, genius.");
+                puzzleSolved = True;
+                exits["south"] = "Freedom Gate";
+            } Else {
+                Print("Wrong. The crystal laughs quietly. You feel judged.");
+            }
+        } Else {
+            Print("Nothing exciting happens. Maybe try again after studying?");
+        }
+    }
+}
+
+
+// Squad: GameManager
+
+
+Squad GameManager {
+
+    Quark rooms = {};
+    Quark player = new Player();
+
+    Doodle setup() {
+
+        // Entrance
+        Quark entrance = new Room();
+        entrance.name = "Entrance";
+        entrance.description = "A dim hallway. A sign reads: 'No refunds if you cry.'";
+        entrance.items.add("map");
+        entrance.exits = { "north": "Spooky Dungeon" };
+        rooms["Entrance"] = entrance;
+
+        // Spooky Dungeon
+        Quark dungeon = new Room();
+        dungeon.name = "Spooky Dungeon";
+        dungeon.description = "Damp walls, moldy smell, and a distant snore...";
+        dungeon.items.add("rusty key");
+        dungeon.exits = { "south": "Entrance", "north": "Crystal Chamber", "west": "Locked Door" };
+        rooms["Spooky Dungeon"] = dungeon;
+
+        // Locked Door
+        Quark door = new Room();
+        door.name = "Locked Door";
+        door.description = "A door stands here, judging you silently.";
+        door.exits = { "east": "Spooky Dungeon" };
+        rooms["Locked Door"] = door;
+
+        // Crystal Chamber (Puzzle Room)
+        Quark crystal = new Room();
+        crystal.name = "Crystal Chamber";
+        crystal.description = "A glowing room filled with floating rocks. Very dramatic.";
+        crystal.exits = { "south": "Spooky Dungeon" };
+        rooms["Crystal Chamber"] = crystal;
+
+        // Freedom Gate
+        Quark exitRoom = new Room();
+        exitRoom.name = "Freedom Gate";
+        exitRoom.description = "Fresh air! You made it! The world applauds your mediocre effort.";
+        exitRoom.exits = {};
+        rooms["Freedom Gate"] = exitRoom;
+    }
+
+    Doodle handleCommand(command) {
+        Quark parts = command.split(" ");
+        Quark action = parts[0];
+
+        If (action == "go") {
+            player.move(parts[1]);
+        } Else If (action == "pick") {
+            player.pickUp(parts[1]);
+        } Else If (action == "inventory") {
+            player.showInventory();
+        } Else If (action == "look") {
+            player.currentRoom.showDetails();
+        } Else If (action == "interact") {
+            player.currentRoom.interact();
+        } Else If (action == "quit") {
+            Print("You quit. The world sighs in disappointment.");
+            player.isAlive = False;
+        } Else {
+            Print("Unknown command. Did a cat walk on your keyboard?");
+        }
+    }
+
+    Doodle startGame() {
+        setup();
+        Print("Welcome to the Mysterious Land of KN-Lang!");
+        player.currentRoom = rooms["Entrance"];
+        player.currentRoom.showDetails();
+
+        SpinCycle (player.isAlive) {
+            Quark command = Input("\n>> ");
+            handleCommand(command);
+
+            If (player.currentRoom.name == "Freedom Gate") {
+                Print("🎉 You won! Time to brag about it for no reason.");
+                player.isAlive = False;
+            }
+        }
+    }
+}
+
+
+// Run the Game
+
+Quark game = new GameManager();
+game.startGame();
